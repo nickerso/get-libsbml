@@ -554,6 +554,7 @@ INSTALL(TARGETS ${LIBSBML_LIBRARY}-static EXPORT ${LIBSBML_LIBRARY}-static-confi
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION include
 )
 
 # and install the exported target configuration
