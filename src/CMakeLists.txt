@@ -510,6 +510,9 @@ endif(MSVC)
 # Build library
 #
 
+# used to create CMake config files for projects using this library
+include(CMakePackageConfigHelpers)
+
 if (NOT LIBSBML_SKIP_SHARED_LIBRARY)
 
 add_library (${LIBSBML_LIBRARY} SHARED ${LIBSBML_SOURCES} )
@@ -522,11 +525,18 @@ endif()
 
 target_link_libraries(${LIBSBML_LIBRARY} ${LIBSBML_LIBS} ${EXTRA_LIBS})
 
-INSTALL(TARGETS ${LIBSBML_LIBRARY}
+# Create the exported target
+INSTALL(TARGETS ${LIBSBML_LIBRARY} EXPORT ${LIBSBML_LIBRARY}-config
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
+
+# and install the exported target configuration
+install(EXPORT ${LIBSBML_LIBRARY}-config DESTINATION ${PACKAGE_CONFIG_DIR})
+WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/${LIBSBML_LIBRARY}-config-version.cmake COMPATIBILITY AnyNewerVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBSBML_LIBRARY}-config-version.cmake
+    DESTINATION ${PACKAGE_CONFIG_DIR})
 
 endif()
 
@@ -539,11 +549,18 @@ endif(WIN32 AND NOT CYGWIN)
 
 target_link_libraries(${LIBSBML_LIBRARY}-static ${LIBSBML_LIBS} ${EXTRA_LIBS})
 
-INSTALL(TARGETS ${LIBSBML_LIBRARY}-static
+# Create the exported target for the static library
+INSTALL(TARGETS ${LIBSBML_LIBRARY}-static EXPORT ${LIBSBML_LIBRARY}-static-config
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+# and install the exported target configuration
+install(EXPORT ${LIBSBML_LIBRARY}-static-config DESTINATION ${PACKAGE_CONFIG_DIR})
+WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/${LIBSBML_LIBRARY}-static-config-version.cmake COMPATIBILITY AnyNewerVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBSBML_LIBRARY}-static-config-version.cmake
+    DESTINATION ${PACKAGE_CONFIG_DIR})
 
 ##############################################################################
 #
